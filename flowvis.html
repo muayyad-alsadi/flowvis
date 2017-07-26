@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Scatter Chart</title>
+    <script src="chart.bundle.js"></script>
+    <script>
+window.chartColors = {
+	red: 'rgb(255, 99, 132)',
+	orange: 'rgb(255, 159, 64)',
+	yellow: 'rgb(255, 205, 86)',
+	green: 'rgb(75, 192, 192)',
+	blue: 'rgb(54, 162, 235)',
+	purple: 'rgb(153, 102, 255)',
+	grey: 'rgb(201, 203, 207)'
+};
+    </script>
+    <style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div style="width:600px">
+        <canvas id="canvas" width="400" height="400" style="display: block; width: 400px; height: 400px;"></canvas>
+    </div>
+    <script src="data.js"></script>
+    <script>
+        var color = Chart.helpers.color;
+        var scatterChartData = { datasets: [] };
+        if (data.botnet.length) scatterChartData.datasets.push({
+            label: "botnet",
+            showLine:false,
+            borderColor: window.chartColors.red,
+            backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(),
+            data: data.botnet
+        });
+        if (data.normal.length) scatterChartData.datasets.push({
+            label: "normal",
+            showLine:false,
+            borderColor: window.chartColors.blue,
+            backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
+            data: data.normal
+        });
+        if (data.both.length) scatterChartData.datasets.push({
+            label: "both",
+            showLine:false,
+            borderColor: window.chartColors.green,
+            backgroundColor: color(window.chartColors.green).alpha(0.2).rgbString(),
+            data: data.both
+        });
+        if (data.none.length) scatterChartData.datasets.push({
+            label: "none",
+            showLine:false,
+            borderColor: window.chartColors.orange,
+            backgroundColor: color(window.chartColors.orange).alpha(0.2).rgbString(),
+            data: data.none
+        });
+        window.onload = function() {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myScatter = Chart.Scatter(ctx, {
+                data: scatterChartData,
+                options: {
+                    tooltips: {
+                        callbacks: {
+                        title: function(items, data) {
+                            var item=items[0]
+                            var details=data.datasets[item.datasetIndex].data[item.index].details;
+                            return details || "";
+                        },
+                        label: function(item, data) {
+                            console.log(item, data);
+                            var ret=data.datasets[item.datasetIndex].label+": ("+item.xLabel+","+item.yLabel+")";
+                            // var details=data.datasets[item.datasetIndex].data[item.index].details;
+                            // if (details) ret=ret+" "+JSON.stringify(details);
+                            return ret;
+                        }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Flow Visualization'
+                    },
+                }
+            });
+        };
+    </script>
+
+
+
+</body></html>
