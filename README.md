@@ -28,6 +28,8 @@ we recommend using `tsne` and `tanh` (other methods are used for comparison)
 python flowvis.py tsne tanh inputfile.csv
 ```
 
+this would output resulted images and `data.js` which can be viewed using `flowvis.html`
+
 ## Results
 
 ![results](/results/tsne-tanh.png)
